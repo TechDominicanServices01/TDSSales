@@ -16,5 +16,16 @@ namespace TDSSales
         {
             InitializeComponent();
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            MODULOS.UsuariosOK usuarios = new MODULOS.UsuariosOK();
+            usuarios.ShowDialog();
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
