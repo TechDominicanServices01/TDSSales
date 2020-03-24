@@ -8,7 +8,7 @@ namespace TDSSales.CONEXION
 {
     class CONEXIONMAESTRA
     {
-        public static string conexion = @"Data Source=ALEXANDRA\SQLEXPRESS;Initial Catalog=TDSSales;Integrated Security=True";  
+        public static string conexion = @"Data Source=DESKTOP-0PF5OK0\ALEXANDRA;Initial Catalog=TDSSales;Integrated Security=True";  
         
     }
 }

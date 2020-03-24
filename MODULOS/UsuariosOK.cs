@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace TDSSales.MODULOS
 {
@@ -33,42 +34,55 @@ namespace TDSSales.MODULOS
         {
 
         }
-
+        public bool validar_Mail(string sMail) {
+            return Regex.IsMatch(sMail, @"^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$");
+        }
         private void button2_Click(object sender, EventArgs e)
         {
-            if (txtnombre.Text != string.Empty) {
-                try
+            if (validar_Mail(txtcorreo.Text) == false)
+            {
+                MessageBox.Show("Dirección de correo electronico no valida, el correo debe tener el formato: nombre@dominio.com, " + " por favor seleccione un correo valido", "Validación de correo electronico", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                txtcorreo.Focus();
+                txtcorreo.SelectAll();
+            }
+            else
+            {
+
+                if (txtnombre.Text != string.Empty)
                 {
-                    SqlConnection con = new SqlConnection();
-                    con.ConnectionString = CONEXION.CONEXIONMAESTRA.conexion;
-                    con.Open();
-                    SqlCommand cmd = new SqlCommand("insertar_usuario", con);
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@nombres", txtnombre.Text);
-                    cmd.Parameters.AddWithValue("@Login", txtusuario.Text);
-                    cmd.Parameters.AddWithValue("@Password", txtpassword.Text);
+                    try
+                    {
+                        SqlConnection con = new SqlConnection();
+                        con.ConnectionString = CONEXION.CONEXIONMAESTRA.conexion;
+                        con.Open();
+                        SqlCommand cmd = new SqlCommand("insertar_usuario", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@nombres", txtnombre.Text);
+                        cmd.Parameters.AddWithValue("@Login", txtusuario.Text);
+                        cmd.Parameters.AddWithValue("@Password", txtpassword.Text);
 
-                    cmd.Parameters.AddWithValue("@Correo", txtcorreo.Text);
-                    cmd.Parameters.AddWithValue("@Rol", txtrol.Text);
-                    System.IO.MemoryStream ms = new System.IO.MemoryStream();
-                    ICONO.Image.Save(ms, ICONO.Image.RawFormat);
+                        cmd.Parameters.AddWithValue("@Correo", txtcorreo.Text);
+                        cmd.Parameters.AddWithValue("@Rol", txtrol.Text);
+                        System.IO.MemoryStream ms = new System.IO.MemoryStream();
+                        ICONO.Image.Save(ms, ICONO.Image.RawFormat);
 
 
-                    cmd.Parameters.AddWithValue("@Icono", ms.GetBuffer());
-                    cmd.Parameters.AddWithValue("@Nombre_de_icono", lblnumeroicono.Text);
-                    cmd.Parameters.AddWithValue("@Estado", "ACTIVO");
+                        cmd.Parameters.AddWithValue("@Icono", ms.GetBuffer());
+                        cmd.Parameters.AddWithValue("@Nombre_de_icono", lblnumeroicono.Text);
+                        cmd.Parameters.AddWithValue("@Estado", "ACTIVO");
 
-                    cmd.ExecuteNonQuery();
-                    con.Close();
+                        cmd.ExecuteNonQuery();
+                        con.Close();
 
-                    mostrar();
-                    panelregistro1.Visible = false;
+                        mostrar();
+                        panelregistro1.Visible = false;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show(ex.Message);
+                    }
+
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message);
-                }
-
             }
         }
         private void mostrar()
@@ -95,6 +109,7 @@ namespace TDSSales.MODULOS
             {
                 MessageBox.Show(ex.Message);  
             }
+            CONEXION.Tamaño_automatico_de_datatables.Multilinea(ref datalistado);
         }
 
         private void pictureBox3_Click(object sender, EventArgs e)
@@ -104,10 +119,70 @@ namespace TDSSales.MODULOS
             lblicono.Visible = false;
             panelIcono.Visible = false;
         }
+        private void Cargar_estado_de_iconos()
+        {
+            try
+            {
+                foreach (DataGridViewRow row in datalistado.Rows)
+                {
 
+                    try
+                    {
+
+                        string Icono = Convert.ToString(row.Cells["Nombre_de_icono"].Value);
+
+                        if (Icono == "1")
+                        {
+                            pictureBox3.Visible = false;
+                        }
+                        else if (Icono == "2")
+                        {
+                            pictureBox4.Visible = false;
+                        }
+                        else if (Icono == "3")
+                        {
+                            pictureBox5.Visible = false;
+                        }
+                        else if (Icono == "4")
+                        {
+                            pictureBox6.Visible = false;
+                        }
+                        else if (Icono == "5")
+                        {
+                            pictureBox7.Visible = false;
+                        }
+                        else if (Icono == "6")
+                        {
+                            pictureBox8.Visible = false;
+                        }
+                        else if (Icono == "7")
+                        {
+                            pictureBox9.Visible = false;
+                        }
+                        else if (Icono == "8")
+                        {
+                            pictureBox10.Visible = false;
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+
+                    }
+
+
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
         private void lblicono_Click(object sender, EventArgs e)
         {
             panelIcono.Visible = true;
+            Cargar_estado_de_iconos();
+            
         }
 
         private void pictureBox4_Click(object sender, EventArgs e)
@@ -228,6 +303,7 @@ namespace TDSSales.MODULOS
 
         private void ICONO_Click(object sender, EventArgs e)
         {
+            Cargar_estado_de_iconos();
             panelIcono.Visible = true;
         }
 
@@ -332,6 +408,129 @@ namespace TDSSales.MODULOS
 
                     }
                 }
+            }
+        }
+
+        private void datalistado_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel14_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel9_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel13_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel8_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel12_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel7_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel11_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void panel6_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtnombre_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtusuario_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtpassword_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtcorreo_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtrol_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void panel5_Click(object sender, EventArgs e)
+        {
+            panelIcono.Visible = false;
+        }
+
+        private void pictureBox11_Click(object sender, EventArgs e)
+        {
+            dlg.InitialDirectory = "";
+            dlg.Filter = "Imagenes|*.jpg;*.png";
+            dlg.FilterIndex = 2;
+            dlg.Title = "Cargador de Imagenes TDSSales";
+            if (dlg.ShowDialog() == DialogResult.OK)
+            {
+                ICONO.BackgroundImage = null;
+                ICONO.Image = new Bitmap(dlg.FileName);
+                ICONO.SizeMode = PictureBoxSizeMode.Zoom;
+                lblnumeroicono.Visible = true;
+                lblnumeroicono.Text = Path.GetFileName(dlg.FileName);
+                lblicono.Visible = false;
+                panelIcono.Visible = false;
             }
         }
     }
