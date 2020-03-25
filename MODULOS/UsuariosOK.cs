@@ -48,7 +48,8 @@ namespace TDSSales.MODULOS
             else
             {
 
-                if (txtnombre.Text != string.Empty)
+                if (txtnombre.Text != string.Empty && txtusuario.Text != string.Empty && txtpassword.Text != string.Empty
+                    && txtrol.Text != string.Empty)
                 {
                     try
                     {
@@ -81,6 +82,11 @@ namespace TDSSales.MODULOS
                     {
                         MessageBox.Show(ex.Message);
                     }
+
+                }
+                else {
+                    MessageBox.Show("Asegurese de haber completado todos los campos", "Registro", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
 
                 }
             }
@@ -166,7 +172,8 @@ namespace TDSSales.MODULOS
                     }
                     catch (Exception ex)
                     {
-
+                      
+                        MessageBox.Show(ex.Message);
 
                     }
 
@@ -175,7 +182,7 @@ namespace TDSSales.MODULOS
             }
             catch (Exception ex)
             {
-
+                MessageBox.Show(ex.Message);
             }
         }
         private void lblicono_Click(object sender, EventArgs e)
@@ -248,7 +255,7 @@ namespace TDSSales.MODULOS
             limpiarcampos();
             btnguardarcambios.Visible = false;
             btnguardar.Visible = true;
-            lblnombrepantalla.Text = "NUEVO USUARIO";
+ 
         }
         private void limpiarcampos()
         {
@@ -269,7 +276,7 @@ namespace TDSSales.MODULOS
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Application.Exit();
+            Close();
         }
 
         private void datalistado_CellContentClick(object sender, DataGridViewCellEventArgs e)
@@ -295,7 +302,6 @@ namespace TDSSales.MODULOS
             txtcorreo.Text = datalistado.SelectedCells[7].Value.ToString();
             txtrol.Text = datalistado.SelectedCells[8].Value.ToString();
             panelregistro1.Visible = true;
-            lblnombrepantalla.Text = "ACTUALIZAR USUARIO";
             btnguardarcambios.Visible = true;
             btnguardar.Visible = false;
 
@@ -405,7 +411,7 @@ namespace TDSSales.MODULOS
 
                     catch (Exception ex)
                     {
-
+                        MessageBox.Show(ex.Message);
                     }
                 }
             }
@@ -493,7 +499,7 @@ namespace TDSSales.MODULOS
 
         private void txtpassword_TextChanged(object sender, EventArgs e)
         {
-
+           
         }
 
         private void txtcorreo_TextChanged(object sender, EventArgs e)
@@ -532,6 +538,63 @@ namespace TDSSales.MODULOS
                 lblicono.Visible = false;
                 panelIcono.Visible = false;
             }
+        }
+        private void buscar_usuario()
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                SqlDataAdapter da;
+                SqlConnection con = new SqlConnection();
+                con.ConnectionString = CONEXION.CONEXIONMAESTRA.conexion;
+                con.Open();
+                da = new SqlDataAdapter("buscar_usuario", con);
+                da.SelectCommand.CommandType = CommandType.StoredProcedure;
+                da.SelectCommand.Parameters.AddWithValue("@letra", txtbuscar.Text);
+
+                da.Fill(dt);
+                datalistado.DataSource = dt;
+                con.Close();
+                datalistado.Columns[1].Visible = false;
+                datalistado.Columns[5].Visible = false;
+                datalistado.Columns[6].Visible = false;
+                datalistado.Columns[7].Visible = false;
+                datalistado.Columns[8].Visible = false;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            CONEXION.Tamaño_automatico_de_datatables.Multilinea(ref datalistado);
+        }
+
+        private void txtbuscar_TextChanged(object sender, EventArgs e)
+        {
+            buscar_usuario();
+        }
+        public void Numeros(System.Windows.Forms.TextBox CajaTexto, System.Windows.Forms.KeyPressEventArgs e) {
+            if (char.IsDigit(e.KeyChar)) {
+                e.Handled = false;
+            }
+            else if (char.IsControl(e.KeyChar))
+            {
+                e.Handled = false;
+            }
+            else
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void txtcorreo_KeyPress(object sender, KeyPressEventArgs e)
+        {
+          
+        }
+
+        private void txtpassword_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            Numeros(txtbuscar, e);
         }
     }
 }
