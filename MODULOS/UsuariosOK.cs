@@ -596,5 +596,10 @@ namespace TDSSales.MODULOS
         {
             Numeros(txtbuscar, e);
         }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

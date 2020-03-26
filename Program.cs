@@ -16,7 +16,7 @@ namespace TDSSales
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MODULOS.UsuariosOK());
+            Application.Run(new MODULOS.LOGIN());
         }
     }
 }
