@@ -54,16 +54,22 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="MODULOS\LOGIN.cs">
+    <Compile Include="MODULOS\CAJA\APERTURA_DE_CAJA.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MODULOS\LOGIN.Designer.cs">
+    <Compile Include="MODULOS\CAJA\APERTURA_DE_CAJA.Designer.cs">
+      <DependentUpon>APERTURA_DE_CAJA.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MODULOS\LOGIN\LOGIN.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MODULOS\LOGIN\LOGIN.Designer.cs">
       <DependentUpon>LOGIN.cs</DependentUpon>
     </Compile>
-    <Compile Include="MODULOS\UsuariosOK.cs">
+    <Compile Include="MODULOS\USUARIOS_Y_PERMISOS\UsuariosOK.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MODULOS\UsuariosOK.Designer.cs">
+    <Compile Include="MODULOS\USUARIOS_Y_PERMISOS\UsuariosOK.Designer.cs">
       <DependentUpon>UsuariosOK.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
@@ -71,10 +77,10 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MODULOS\LOGIN.resx">
+    <EmbeddedResource Include="MODULOS\LOGIN\LOGIN.resx">
       <DependentUpon>LOGIN.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MODULOS\UsuariosOK.resx">
+    <EmbeddedResource Include="MODULOS\USUARIOS_Y_PERMISOS\UsuariosOK.resx">
       <DependentUpon>UsuariosOK.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -99,6 +105,8 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="MODULOS\LOGIN\HTMLPage1.html" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
