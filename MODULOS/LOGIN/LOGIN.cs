@@ -6,6 +6,8 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -51,7 +53,7 @@ namespace TDSSales.MODULOS
                     b.Name = rdr["idUsuario"].ToString();
                     b.Size = new System.Drawing.Size(175, 25);
                     b.Font = new System.Drawing.Font("Microsoft Sans Serif", 13);
-                    b.BackColor = Color.FromArgb(67, 67, 67);
+                    b.BackColor = Color.FromArgb(47, 47, 47);
                     b.ForeColor = Color.White;
                     b.Dock = DockStyle.Bottom;
                     b.TextAlign = ContentAlignment.MiddleCenter;
@@ -59,7 +61,7 @@ namespace TDSSales.MODULOS
 
                     p1.Size = new System.Drawing.Size(237, 170);
                     p1.BorderStyle = BorderStyle.None;
-                    p1.BackColor = Color.FromArgb(67, 67, 67);
+                    p1.BackColor = Color.FromArgb(47, 47, 47);
 
 
                     I1.Size = new System.Drawing.Size(237, 135);
@@ -213,6 +215,128 @@ namespace TDSSales.MODULOS
 
         private void flowLayoutPanel1_Paint(object sender, PaintEventArgs e)
         {
+
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            panel1.Visible = true;
+            panel2.Visible = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            PanelRestaurarCuenta.Visible = true;
+            panel1.Visible = false;
+            mostrar_correos();
+        }
+        private void mostrar_correos()
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                SqlDataAdapter da;
+                SqlConnection con = new SqlConnection();
+                con.ConnectionString = CONEXION.CONEXIONMAESTRA.conexion;
+                con.Open();
+
+                da = new SqlDataAdapter("select Correo from USUARIO2 where Estado='ACTIVO'", con);
+
+                da.Fill(dt);
+                txtcorreo.DisplayMember = "Correo";
+                txtcorreo.ValueMember = "Correo";
+                txtcorreo.DataSource = dt;
+                con.Close();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+
+            }
+
+
+
+        }
+        private void txtcorreo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Button4_Click(object sender, EventArgs e)
+        {
+            panel1.Visible = true;
+            PanelRestaurarCuenta.Visible = false;
+            
+        }
+        internal void enviarCorreo(string emisor, string password, string mensaje, string asunto, string destinatario, string ruta)
+        {
+            try
+            {
+                MailMessage correos = new MailMessage();
+                SmtpClient envios = new SmtpClient();
+                correos.To.Clear();
+                correos.Body = "";
+                correos.Subject = "";
+                correos.Body = mensaje;
+                correos.Subject = asunto;
+                correos.IsBodyHtml = true;
+                correos.To.Add((destinatario));
+                correos.From = new MailAddress(emisor);
+                envios.Credentials = new NetworkCredential(emisor, password);
+
+                envios.Host = "smtp.gmail.com";
+                envios.Port = 587;
+                envios.EnableSsl = true;
+
+                envios.Send(correos);
+                lblEstado_de_envio.Text = "ENVIADO";
+                MessageBox.Show("Contraseña Enviada, revisa tu correo Electronico", "Restauracion de contraseña", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                PanelRestaurarCuenta.Visible = false;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("ERROR, revisa tu correo Electronico", "Restauracion de contraseña", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                lblEstado_de_envio.Text = "Correo no registrado";
+            }
+
+        }   
+
+        private void Button3_Click(object sender, EventArgs e)
+        {
+            mostrar_usuarios_por_correo();
+            //richTextBox1.Text = richTextBox1.Text.Replace("@pass", lblResultadoContraseña.Text);
+            //enviarCorreo("ada369.technical@gmail.com", "MAGbri2019", richTextBox1.Text, "Solicitud de Contraseña", txtcorreo.Text, "");
+        }
+        private void mostrar_usuarios_por_correo()
+        {
+            try
+            {
+                string resultado;
+                SqlConnection con = new SqlConnection();
+                con.ConnectionString = CONEXION.CONEXIONMAESTRA.conexion;
+                SqlCommand da = new SqlCommand("buscar_USUARIO_por_correo", con);
+                da.CommandType = CommandType.StoredProcedure;
+                da.Parameters.AddWithValue("@correo", txtcorreo.Text);
+
+                con.Open();
+                lblResultadoContraseña.Text = Convert.ToString(da.ExecuteScalar());
+                con.Close();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+
+            }
+
+
 
         }
     }
