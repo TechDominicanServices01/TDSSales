@@ -260,6 +260,37 @@ namespace TDSSales.MODULOS
 
 
         }
+        private void mostrar_un_correo()
+        {
+            try
+            {
+                DataTable dt = new DataTable();
+                SqlDataAdapter da;
+                SqlConnection con = new SqlConnection();
+                con.ConnectionString = CONEXION.CONEXIONMAESTRA.conexion;
+                con.Open();
+
+                da = new SqlDataAdapter("select Correo from USUARIO2 where Estado='ACTIVO' and login = '"+txtlogin.Text+"'", con);
+
+                da.Fill(dt);
+                txtcorreo.DisplayMember = "Correo";
+                txtcorreo.ValueMember = "Correo";
+                txtcorreo.DataSource = dt;
+                con.Close();
+
+
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+
+            }
+
+
+
+        }
+
         private void txtcorreo_SelectedIndexChanged(object sender, EventArgs e)
         {
 
@@ -343,6 +374,69 @@ namespace TDSSales.MODULOS
         {
             UsuariosOK usuarios = new UsuariosOK();
             usuarios.ShowDialog();
+
+        }
+
+        private void btn1_Click(object sender, EventArgs e)
+        {
+            txtpassword.Text = txtpassword.Text + "1";
+        }
+
+        private void btn2_Click(object sender, EventArgs e)
+        {
+            txtpassword.Text = txtpassword.Text + "2";
+        }
+
+        private void btn3_Click(object sender, EventArgs e)
+        {
+            txtpassword.Text = txtpassword.Text + "3";
+        }
+
+        private void btn4_Click(object sender, EventArgs e)
+        {
+            txtpassword.Text = txtpassword.Text + "4";
+        }
+
+        private void btn5_Click(object sender, EventArgs e)
+        {
+            txtpassword.Text = txtpassword.Text + "5";
+        }
+
+        private void btn6_Click(object sender, EventArgs e)
+        {
+            txtpassword.Text = txtpassword.Text + "6";
+        }
+
+        private void btn7_Click(object sender, EventArgs e)
+        {
+            txtpassword.Text = txtpassword.Text + "7";
+        }
+
+        private void btn8_Click(object sender, EventArgs e)
+        {
+            txtpassword.Text = txtpassword.Text + "8";
+        }
+
+        private void btn9_Click(object sender, EventArgs e)
+        {
+            txtpassword.Text = txtpassword.Text + "9";
+        }
+
+        private void btn0_Click(object sender, EventArgs e)
+        {
+            txtpassword.Text = txtpassword.Text + "0";
+        }
+
+        private void btnborrartodo_Click(object sender, EventArgs e)
+        {
+            txtpassword.Clear();
+        }
+
+        private void button15_Click(object sender, EventArgs e)
+        {
+            PanelRestaurarCuenta.Visible = true;
+            mostrar_un_correo();
+
 
         }
     }
