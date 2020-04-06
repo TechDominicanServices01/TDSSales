@@ -227,7 +227,7 @@ namespace TDSSales.MODULOS
         private void button1_Click(object sender, EventArgs e)
         {
             PanelRestaurarCuenta.Visible = true;
-            panel1.Visible = false;
+         
             mostrar_correos();
         }
         private void mostrar_correos()
@@ -267,8 +267,7 @@ namespace TDSSales.MODULOS
 
         private void Button4_Click(object sender, EventArgs e)
         {
-            panel1.Visible = true;
-            PanelRestaurarCuenta.Visible = false;
+            PanelRestaurarCuenta.Visible = false; 
             
         }
         internal void enviarCorreo(string emisor, string password, string mensaje, string asunto, string destinatario, string ruta)
@@ -309,14 +308,14 @@ namespace TDSSales.MODULOS
         private void Button3_Click(object sender, EventArgs e)
         {
             mostrar_usuarios_por_correo();
-            //richTextBox1.Text = richTextBox1.Text.Replace("@pass", lblResultadoContraseña.Text);
-            //enviarCorreo("ada369.technical@gmail.com", "MAGbri2019", richTextBox1.Text, "Solicitud de Contraseña", txtcorreo.Text, "");
+            richTextBox1.Text = richTextBox1.Text.Replace("@pass", lblResultadoContraseña.Text);
+            enviarCorreo("techdominicanservices@gmail.com", "tds@tds2020", richTextBox1.Text, "Solicitud de Contraseña", txtcorreo.Text, "");
         }
         private void mostrar_usuarios_por_correo()
         {
             try
             {
-                string resultado;
+                //string resultado;
                 SqlConnection con = new SqlConnection();
                 con.ConnectionString = CONEXION.CONEXIONMAESTRA.conexion;
                 SqlCommand da = new SqlCommand("buscar_USUARIO_por_correo", con);
@@ -337,6 +336,13 @@ namespace TDSSales.MODULOS
             }
 
 
+
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            UsuariosOK usuarios = new UsuariosOK();
+            usuarios.ShowDialog();
 
         }
     }
